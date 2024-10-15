@@ -48,10 +48,6 @@ namespace hw07
         }
         public Airplane()
         {
-            _name.Clear();
-            _manufacturer.Clear();
-            _type.Clear();
-            _year = 0;
         }
         public Airplane(string name, string manufacturer, string type, int year)
         {

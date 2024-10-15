@@ -70,13 +70,6 @@ namespace hw07
         }
         public Employee()
         {
-            _name = "Unknown";
-            _age = 0;
-            _phone_number.Clear();
-            _email.Clear(); 
-            _job_title.Clear();
-            _dob = DateOnly.MinValue;
-            _duties = Array.Empty<string>();
         }
         public Employee(string name, int age, string phoneNumber, string email, string jobTitle, DateOnly dob, string[] duties)
         {
