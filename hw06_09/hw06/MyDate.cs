@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hw06
+namespace hw06_09
 {
     internal class MyDate
     {
@@ -12,9 +12,37 @@ namespace hw06
         private int _month;
         private int _day;
 
-        public int Year { get { return _year; } set { _year = value; } }
-        public int Month { get { return _month; } set { _month = value; } }
-        public int Day { get { return _day; } set { _day = value; } }
+        public int Year
+        {
+            get { return _year; }
+            set {
+                if (value < 1)
+                    throw new ArgumentException("Year cannot be less than 1");
+                _year = value;
+            }
+        }
+
+        public int Month
+        {
+            get { return _month; }
+            set
+            {
+                if (value < 1 || value > 12)
+                    throw new ArgumentException("Month has to be between 1 and 12");
+                _month = value;
+            }
+        }
+
+        public int Day
+        {
+            get { return _day; }
+            set
+            {
+                if (value < 1 || value > DaysInMonth(_month, _year))
+                    throw new ArgumentException($"Day must be between 1 and {DaysInMonth(_month, _year)}");
+                _day = value;
+            }
+        }
         public string Day_Of_Week
         {
             get
@@ -36,9 +64,7 @@ namespace hw06
         {
             int days1 = TotalDays(date1);
             int days2 = TotalDays(date2);
-
             return Math.Abs(days1 - days2);
-
         }
 
         private int TotalDays(MyDate date)
@@ -56,7 +82,6 @@ namespace hw06
             }
 
             totalDays += date.Day;
-
             return totalDays;
         }
         private bool IsLeapYear(int year)

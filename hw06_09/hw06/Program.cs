@@ -1,4 +1,4 @@
-﻿using hw06;
+﻿using hw06_09;
 
 string showdate;
 MyDate myDate1 = new MyDate(2005, 10, 26);
