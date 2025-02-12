@@ -36,6 +36,7 @@
             this.textBoxTo = new System.Windows.Forms.TextBox();
             this.buttonCopy = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.buttonStop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxFrom
@@ -107,11 +108,22 @@
             this.progressBar1.Size = new System.Drawing.Size(296, 23);
             this.progressBar1.TabIndex = 8;
             // 
+            // buttonStop
+            // 
+            this.buttonStop.Location = new System.Drawing.Point(342, 147);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(75, 23);
+            this.buttonStop.TabIndex = 9;
+            this.buttonStop.Text = "Stop";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(457, 163);
+            this.ClientSize = new System.Drawing.Size(445, 191);
+            this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.buttonCopy);
             this.Controls.Add(this.buttonTo);
@@ -137,6 +149,7 @@
         private System.Windows.Forms.TextBox textBoxTo;
         private System.Windows.Forms.Button buttonCopy;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button buttonStop;
     }
 }
 

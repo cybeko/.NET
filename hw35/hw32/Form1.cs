@@ -11,6 +11,9 @@ namespace hw32
     public partial class Form1 : Form
     {
         private SynchronizationContext sC = null;
+        private CancellationTokenSource cancellationTokenSource;
+        private long bytes = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -37,14 +40,20 @@ namespace hw32
 
         private void buttonCopy_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => CopyFileMethod(textBoxFrom.Text, textBoxTo.Text))
-                            .ContinueWith(t => ShowFinalMessage(), TaskScheduler.FromCurrentSynchronizationContext());
+            cancellationTokenSource = new CancellationTokenSource();
+            bytes = 0; 
+
+            Task.Factory.StartNew(() => CopyFileMethod(textBoxFrom.Text, textBoxTo.Text, cancellationTokenSource.Token),
+                                  cancellationTokenSource.Token)
+                          .ContinueWith(t => ShowFinalMessage(), TaskScheduler.FromCurrentSynchronizationContext());
         }
+
         private void ShowFinalMessage()
         {
-            MessageBox.Show("Copied successfully", "Success");
+            MessageBox.Show($"Copied {bytes} bytes");
         }
-        private void CopyFileMethod(string sourcePath, string destinationPath)
+
+        private void CopyFileMethod(string sourcePath, string destinationPath, CancellationToken token)
         {
             const int bufSize = 4096;
 
@@ -54,22 +63,28 @@ namespace hw32
                 byte[] buf = new byte[bufSize];
 
                 long totalBytes = sourceStream.Length;
-                long copiedBytes = 0;
-                int bytesRead;
 
                 sC.Send(_ => progressBar1.Maximum = 100, null);
                 sC.Send(_ => progressBar1.Value = 0, null);
 
-                while ((bytesRead = sourceStream.Read(buf, 0, buf.Length)) > 0)
+                while (!token.IsCancellationRequested)
                 {
-                    destStream.Write(buf, 0, bytesRead);
-                    copiedBytes += bytesRead;
+                    int bytesRead = sourceStream.Read(buf, 0, buf.Length);
+                    if (bytesRead == 0) break;
 
-                    int progress = (int)((copiedBytes * 100) / totalBytes);
+                    destStream.Write(buf, 0, bytesRead);
+                    bytes += bytesRead;
+
+                    int progress = (int)((bytes * 100) / totalBytes);
 
                     sC.Send(_ => progressBar1.Value = progress, null);
                 }
             }
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            cancellationTokenSource?.Cancel();
         }
     }
 }
